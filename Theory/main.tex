@@ -1,0 +1,286 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% LaTeX Template
+%
+% This template originates from:
+% http://www.LaTeXTemplates.com
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\input{structure.tex} % Include the file specifying the document structure and custom commands
+
+\usepackage{graphicx}
+%Path in Windows format:
+\graphicspath{ {.Images/} }
+
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+
+%----------------------------------------------------------------------------------------
+%	ASSIGNMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{Wheel of Fortune - Theory} % Title of the assignment
+
+\author{Tansel Arif\\ \texttt{tanselarif@live.co.uk}} % Author name and email address
+
+\date{\today} % University, school and/or department name(s) and a date
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Print the title
+
+%----------------------------------------------------------------------------------------
+%	INTRODUCTION
+%----------------------------------------------------------------------------------------
+
+\section*{Introduction} % Unnumbered section
+
+\begin{flushleft}
+It is sometimes the case that a random variable is dependent upon another random variable. For example, on some slot machines, the number of spins of the bonus wheel depends on the number of spin/bonus icons you achieve on the slots wheel itself. If you get 1 spin icon you get to spin the wheel once, if you get 2 spin icons, you get to spin the wheel twice and so on. If there is a certain probability of winning the bonus in the wheel each time you spin it and the wins from each spin are independent, then the more times you're allowed to spin it, the more chance of winning the bonus. But, the number of initial spin icons determines the number of times you're allowed to spin the wheel which in turn give you more chances to win the bonus. The question is, what is the probability of winning the bonus?\newline
+
+Below, I frame a similar problem with a wheel and coin flips.
+\end{flushleft}
+
+\section{The Problem} % Numbered section
+
+\begin{flushleft}
+You spin the wheel of fortune. The wheel gives $0$ with probability $\frac{1}{20}$, 1 with probability $\frac{1}{2}$, 2 with probability $\frac{1}{4}$, 3 with probability $\frac{3}{20}$ and 4 with probability $\frac{1}{20}$.\newline
+
+Depending on the number you get from the wheel, you are allowed to flip a coin that many times and record the number of heads you get. The coin is biased towards heads with a probability of $\frac{7}{10}$ of getting a heads.\newline
+
+What is the probability distribution of the number of heads if you play the game?
+\end{flushleft}
+
+\section{The Solution} % Numbered section
+
+\begin{flushleft}
+Let $W$ be a random variable (rv) representing the number obtained from spinning the wheel. Its distribution is shown in Figure 1. \newline
+
+Let $X_i$ be independent and identically distributed (i.i.d) rvs representing the outcome of a flip of the coin. Then $X_i \sim Ber(p)$ where $p=0.7$.\newline
+
+Define a rv, $Y$, as
+$$Y = \sum_{i=1}^W X_i$$
+where $W$ itself is random. We can approach this problem using probability generating functions (p.g.f):\newline
+
+\begin{definition}{Probability Generating Function}
+If $X$ is a discrete rv taking values in the non-negative integers \{0,1,2,3,...\}, then the probability generating function of $X$ is defined as [ref Wikipedia]
+$$G_X(s) = E(s^X) = \sum_{k=0}^{\infty} s^k P(X=k)$$
+\end{definition}
+
+Moreover
+
+\begin{theorem}[Uniqueness of p.g.f]
+The distribution of a rv is uniquely determined by its p.g.f.
+\end{theorem}
+
+So let's find the p.g.f of W. From [Definition above]
+
+\begin{equation} \label{eq1}
+\begin{split}
+G_W(s) & = E(s^W) \\
+& = \sum_{k=0}^4 s^k P(W=k) \\
+& = s^0 P(W=0) + s^1 P(W=1) + s^2 P(W=2) + s^3 P(W=3) + s^4 P(W=4) \\
+& = \frac{1}{20} + \frac{1}{2}s + \frac{1}{4}s^2 + \frac{3}{20}s^3 + \frac{1}{20}s^4
+\end{split}
+\end{equation}
+
+and the p.g.f of $X \sim Ber(p)$ is
+
+\begin{equation} \label{eq1}
+\begin{split}
+G_X(s) & = E(s^X) \\
+& = \sum_{k=0}^1 s^k P(X=k) \\
+& = s^0 P(X=0) + s^1 P(X=1)\\
+& = 1-p + sp
+\end{split}
+\end{equation}
+
+and the p.g.f of $Y = \sum_{i=1}^W X_i$ is 
+
+\begin{equation} \label{eq1}
+\begin{split}
+G_Y(s) & = E(s^Y) \\
+& = E(s^{\sum_{i=1}^W X_i}) \\
+& = \sum_{w=0}^4 E(s^{\sum_{i=1}^W X_i} | W=w) P(W=w) \\
+& = \sum_{w=0}^4 E(s^{\sum_{i=1}^w X_i}) P(W=w) \\
+& = \sum_{w=0}^4 E(\Pi_{i=1}^w s^{X_i}) P(W=w) \\
+& = \sum_{w=0}^4 \pi_{i=1}^w E(s^{X_i}) P(W=w) \\
+& = \sum_{w=0}^4 \pi_{i=1}^w G_X(s) P(W=w) \\
+& = \sum_{w=0}^4 G_X(s)^w P(W=w) \\
+& = E(G_X(s)^W) \\
+& = G_W(G_X(s))
+\end{split}
+\end{equation}
+
+Using equations 1 and 2 and collecting powers of $s$
+
+\begin{equation} \label{eq1}
+\begin{split}
+G_Y(s) & = \frac{1}{20} + \frac{1}{2}(1-p) + \frac{1}{4}(1-p)^2 + \frac{3}{20}(1-p)^3 + \frac{1}{20}(1-p)^4 \\
+& + sp(\frac{1}{2} + \frac{1}{2}(1-p) + \frac{9}{20}(1-p)^2 + \frac{1}{5}(1-p)^3) \\
+& + s^2 p^2(\frac{1}{4} + \frac{9}{20}(1-p) + \frac{3}{10}(1-p)^2) \\
+& + s^3 p^3(\frac{3}{20} + \frac{1}{5}(1-p)) \\
+& + s^4 p^4 \frac{1}{20}
+\end{split}
+\end{equation}
+
+Keeping Definition [X] in mind, the coefficient of $s^i$ in Equation [X] is $P(Y=i)$. The probability distribution of $Y$ is then
+
+\begin{equation} \label{eq1}
+\begin{split}
+P(Y = 0) & = \frac{1}{20} + \frac{1}{2}(1-p) + \frac{1}{4}(1-p)^2 + \frac{3}{20}(1-p)^3 + \frac{1}{20}(1-p)^4 \\
+P(Y = 1) & = p(\frac{1}{2} + \frac{1}{2}(1-p) + \frac{9}{20}(1-p)^2 + \frac{1}{5}(1-p)^3) \\
+P(Y = 2) & = p^2(\frac{1}{4} + \frac{9}{20}(1-p) + \frac{3}{10}(1-p)^2) \\
+P(Y = 3) & = p^3(\frac{3}{20} + \frac{1}{5}(1-p)) \\
+P(Y = 4) & = p^4 \frac{1}{20}
+\end{split}
+\end{equation}
+
+Notice that if the probability of heads in the coin flip is 1 (p = 1), we recover the probability distribution of $W$, i.e. $W$ completely determines the number of heads.\newline
+
+Conversely, if the probability of heads in the coin flip is 0 (p = 0), the coin will always land tails regardless of the outcome of a trial from $W$. Then $P(Y=0) = 1$, i.e. no matter what happens, there will be no heads from the game.
+
+\end{flushleft}
+\section{Finding the probability $p$ from observations} % Numbered section
+
+\begin{flushleft}
+Suppose that we are not told the value of $p$. Given an observation of $W$, $Y$ has a more well-known distribution
+
+$$Y = \sum_{i=0}^w X_i$$
+
+In particular, $Y$ is just the sum of independent Bernoulli ($Ber(p)$) rvs which is has a binomial distribution
+
+$$Y \sim B(w,p)$$
+
+(See Appendix for proof using p.g.f definitions above). In mathematical notation, the above means
+
+$$Y|W=w \sim B(w,p)$$
+
+Let $p \sim Beta(\alpha, \beta)$ for some $\alpha$ $\beta$. I have chosen this distribution for $p$ as this is conjugate to the Binomial Distribution (See Appendix) which makes calculations easier.\newline
+
+The posterior distribution for $p$ can then be written as
+
+\begin{equation} \label{eqp}
+\begin{split}
+P(p|Y,W) & = \frac{P(p,Y,W)}{P(Y,W)} \\
+& = \frac{P(Y|W,p) P(W) P(p)}{\sum_{w=0}^4 P(Y|W=w) P(W=w)} \\
+& = \frac{Beta(\alpha + \sum_{i=1}^n, \beta + n - \sum_{i=1}^n x_i) P(W)}{\sum_{w=0}^4 P(Y|W=w) P(W=w)} \\
+& = \frac{Beta(\alpha + y, \beta + w - y) P(W)}{\sum_{w=0}^4 P(Y|W=w) P(W=w)}
+\end{split}
+\end{equation}
+
+If we're just looking to find the most likely value of $p$, we don't really need to calculate the denominator in Equation \ref{eqp} since it is just a constant term relative to the parameters. Equation \ref{eqp} is for a single game which includes a single spin of the wheel and a series of coin flips. For $N$ games we have
+
+\begin{equation} \label{eqpplus}
+\begin{split}
+P(p|Y,W) & = \frac{Beta(\alpha + \sum_{i=1}^N y_i, \beta + \sum_{i=1}^N w_i - \sum_{i=1}^N y_i) P(W)}{\sum_{w=0}^4 P(Y|W=w) P(W=w)}
+\end{split}
+\end{equation}
+
+Let us approach this problem from a maximum likelihood estimation (MLE) perspective. As previously mentioned, the denominator in Equation \ref{eqpplus} is a proportionality constant and does not depend on the parameters of interest. This means that in order to find $p$ which maximises $P(p|Y,W)$, we need only concern ourselves with the numerator. Using the definition of the $Beta$ distribution, we can write the numerator of Equation \ref{eqpplus} as
+
+\begin{equation} \label{eqmle}
+\begin{split}
+P(p|Y,W) & = K \frac{\Gamma(\alpha'+\beta')}{\Gamma(\alpha')\Gamma(\beta')} p^{\alpha'-1}(1-p)^{\beta'-1} P(W)
+\end{split}
+\end{equation}
+
+Where $K$ is a constant and
+
+$$\alpha' = \alpha + \sum_{i=1}^N y_i,\; \beta' = \beta + \sum_{i=1}^N w_i - \sum_{i=1}^N y_i$$
+
+Taking the derivative of Equation \ref{eqmle} with respect to $p$
+
+\begin{equation} \label{eqmle2}
+\begin{split}
+\frac{\partial P(p|Y,W)}{\partial p} & = P(W) \frac{\Gamma(\alpha' + \beta')}{\Gamma(\alpha')\Gamma(\beta')} \left[  (\alpha' - 1)p^{\alpha'-2} (1-p)^{\beta'-1} - p^{\alpha'-1}(\beta'-1)(1-p)^{\beta'-2}  \right]
+\end{split}
+\end{equation}
+
+Replacing $\alpha'$ and $\beta'$, and setting this equal to zero we obtain
+
+\begin{equation} \label{eqmle3}
+\begin{split}
+p &= \frac{1-\alpha'}{2-\alpha'-\beta'} \\
+&= \frac{1-(\alpha + \sum_{i=1}^N y_i)}{2-(\alpha + \sum_{i=1}^N y_i)-(\beta - \sum_{i=1}^N w_i - \sum_{i=1}^N y_i)} \\
+&= \frac{1-(\alpha + \sum_{i=1}^N y_i)}{2-\alpha-\beta-\sum_{i=1}^N w_i}
+\end{split}
+\end{equation}
+
+Equation \ref{eqmle3} gives us a way of calculating the value of $p$ that is most likely given observations of $W$ and $Y$. Going further, we may only have data of the overall outcomes of the trials, i.e. the rv Y. In this case we may utilise the MLE of the mean of outcomes of $W$ to be used in Equation \ref{eqmle3} as follows
+
+\begin{equation} \label{eqmle4}
+\begin{split}
+p &= \frac{1-(\alpha + \sum_{i=1}^N y_i)}{2-\alpha-\beta-N \frac{\sum_{i=1}^N w_i}{N}} \\
+&= \frac{1-(\alpha + \sum_{i=1}^N y_i)}{2-\alpha-\beta-N E[W]} \\
+&= \frac{1-(\alpha + \sum_{i=1}^N y_i)}{2-\alpha-\beta-1.65N}
+\end{split}
+\end{equation}
+
+Let's see what happens when we set $p=2$ in the theory section above and provide `hypothetically ideal' observations to be used in Equation \ref{eqmle4}. The probability distribution of $Y$ then becomes
+
+\begin{equation} \label{eqYpdf}
+\begin{split}
+P(Y=0) &= 0.70728 \\
+P(Y=1) &= 0.25808 \\
+P(Y=2) &= 0.03208 \\
+P(Y=3) &= 0.00248 \\
+P(Y=4) &= 0.00008
+\end{split}
+\end{equation}
+
+According to \ref{eqYpdf}, out of $N=100000$ trials, we expect to have: $70728$ trials resulting in $0$ heads, $25808$ trials resulting in $1$ head, $3208$ trials resulting in $2$ heads, $248$ trials resulting in $3$ heads and $8$ trials resulting in $4$ heads for a total of $33000$ heads in $100000$ trials/games. For the prior distribution for $p$, we may specify the parameters $\alpha=1$ and $\beta=1$ resulting in a $Beta$ distribution that is uniform. Using these parameters, our estimation for the value of $p$ that was used to generate these observations is
+
+$$p = \frac{1-(1+33000)}{-100000 \times 1.65} = 0.2$$
+
+Note that here we have only used the knowledge of the outcomes along with the p.d.f of $W$ to determine $p$. In general, the p.d.f of $W$ may be unknown requiring the data from the outcomes of $W$, or there may be strong prior evidence that the coin is unbiased (we could set $\alpha = 50,\beta = 50$ for example). Additionally, a probability distribution for $p$ may be required, in which case the denominator in Equation \ref{eqpplus} would have to be calculated.
+
+\end{flushleft}
+\section{Simulations} % Numbered section
+
+Simulations are carried out using the accompanying Python app utilising Pygame for visualisation. 
+
+It is expected that if the win probability is 1 ($p=1$), the probability of the Gambler going bankrupt should be 0 and the expected number of steps should be the number of steps required to go from the current fortune to \$N. This can be seen in figure \ref{fig:sim4} where each of the 1000 simulations carried out follow the exact same path. If the the win probability is 0 ($p=0$), then we expect that the probability of the Gambler going bankrupt should be 1 and the expected number of steps should be the number of steps required to go from the current fortune to \$0. This can be seen in figure \ref{fig:sim5} where each of the 1000 simulations carried out follow the exact same path. Two further simulations are carried out with identical parameters but different starting fortunes. Figures \ref{fig:sim3} and \ref{fig:sim6} show that a starting fortune closer to \$0 increases the probability of bankruptcy.
+
+\begin{figure}[r]
+    \centering
+    \includegraphics[width=\textwidth]{Simulation3}
+    \caption{This is a plot of 1000 simulations with $k = 13$, $p = 0.5$, $N = 26$. The theory results in a probability 0.5 of bankruptcy and an expected number of steps of 169. The horizontal green line represents \$N and the hosrizontal red line represents \$0. We can see that the simulated probability of 0.498 and the simulated average number of steps of 173 is close to the theoretical values.}
+    \label{fig:sim3}
+\end{figure}
+
+\begin{figure}[r]
+    \centering
+    \includegraphics[width=\textwidth]{Simulation4}
+    \caption{This is a plot of 1000 simulations with $k = 13$, $p = 1$, $N = 26$. The theory results in a probability 0 of bankruptcy and an expected number of steps of 13. The horizontal green line represents \$N and the hosrizontal red line represents \$0. We can see that the simulated probability of 0 and the simulated average number of steps of 13 exactly match the theoretical values.}
+    \label{fig:sim4}
+\end{figure}
+
+\begin{figure}[r]
+    \centering
+    \includegraphics[width=\textwidth]{Simulation5}
+    \caption{This is a plot of 1000 simulations with $k = 13$, $p = 0$, $N = 26$. The theory results in a probability 1 of bankruptcy and an expected number of steps of 13. The horizontal green line represents \$N and the hosrizontal red line represents \$0. We can see that the simulated probability of 1 and the simulated average number of steps of 13 exactly match the theoretical values.}
+    \label{fig:sim5}
+\end{figure}
+
+\begin{figure}[r]
+    \centering
+    \includegraphics[width=\textwidth]{Simulation6}
+    \caption{This is a plot of 1000 simulations with $k = 3$, $p = 0.5$, $N = 26$. The theory results in a probability 0.8846 of bankruptcy and an expected number of steps of 69. The horizontal green line represents \$N and the hosrizontal red line represents \$0. We can see that the simulated probability of 0.898 and the simulated average number of steps of 68.85 match the theoretical values closely.}
+    \label{fig:sim6}
+\end{figure}
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
