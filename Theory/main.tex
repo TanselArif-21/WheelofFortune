@@ -258,7 +258,7 @@ p &= \frac{1-\alpha'}{2-\alpha'-\beta'} \\
 \end{split}
 \end{equation}
 
-Equation \ref{eqmle3} gives us a way of calculating the value of $p$ that is most likely given observations of $W$ and $Y$. Going further, we may only have data for the overall outcomes of the trials, i.e. the RV Y. In this case we may utilise the MLE of the mean of outcomes of $W$ to be used in Equation \ref{eqmle3} as follows
+Equation \ref{eqmle3} gives us a way of calculating the value of $p$ that is most likely given observations of $W$ and $Y$. Going further, the above assumes knowledge of the outcomes from $W$. If we don't have this information, the approximation $E[W] \approx \frac{1}{N}\sum_{i=1}^N w_i$ will help with an approximation. In this case we may utilise the expected value of $W$ to be used in Equation \ref{eqmle3} as follows
 
 \begin{equation} \label{eqmle4}
 \begin{split}
