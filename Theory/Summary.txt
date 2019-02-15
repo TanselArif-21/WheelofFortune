@@ -1,6 +1,6 @@
 ﻿PREFACE
 
-This article has 4 sections:
+This article has 5 sections:
 0- Introduction: Introduction to a process dependent on two random variables
 1- The Problem: Setting up the wheel of fortune problem
 2- The Solution: The solution to the wheel of fortune problem
